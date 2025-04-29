@@ -37,7 +37,6 @@ class MovieControllerIntegrationTest {
     movieId = movieDTO.id(); // Assuming getId() returns the generated ID
   }
 
-  @Disabled
   @Test
   void testCreateMovie() throws Exception {
     mockMvc.perform(post("/movies")
@@ -48,7 +47,6 @@ class MovieControllerIntegrationTest {
         .andExpect(jsonPath("$.title").value("The Dark Knight"));
   }
 
-  @Disabled
   @Test
   void testGetMovie() throws Exception {
     mockMvc.perform(get("/movies/{id}", movieId))
@@ -56,7 +54,7 @@ class MovieControllerIntegrationTest {
         .andExpect(jsonPath("$.title").value("Inception"));
   }
 
-  @Disabled
+
   @Test
   void testUpdateMovie() throws Exception {
     mockMvc.perform(put("/movies/{id}", movieId)
@@ -67,7 +65,7 @@ class MovieControllerIntegrationTest {
         .andExpect(jsonPath("$.title").value("Updated Title"));
   }
 
-  @Disabled
+
   @Test
   void testDeleteMovie() throws Exception {
     mockMvc.perform(delete("/movies/{id}", movieId))

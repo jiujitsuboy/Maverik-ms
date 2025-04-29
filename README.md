@@ -20,7 +20,8 @@ A production-grade Spring Boot 3 microservice to manage Movies, search external 
 
 ### 1. Build the Application
 ```bash
-./mvnw clean package
+./mvnw clean package -DskipTests
+
 ```
 
 ### 2. Run with Docker Compose
