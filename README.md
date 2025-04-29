@@ -80,6 +80,14 @@ curl -X GET "http://localhost:8080/movies?page=0&size=10&sortBy=title"
 curl -X GET http://localhost:8080/movies/aggregate
 ```
 
+## 📦 Monitoring
+
+- [health endpoint](http://localhost:8080/actuator/health)
+- [circuit breaker](http://localhost:8080/actuator/circuitbreakerevents)
+
+## 📦 Swagger
+[swagger-ui](http://localhost:8080/swagger-ui/index.html)
+
 ---
 
 ## 🧠 Environment Config (application.yml)
