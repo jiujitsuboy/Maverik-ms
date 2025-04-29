@@ -2,29 +2,37 @@ version: '3.8'
 
 services:
 
-  sqlserver:
+  sqlserverdb:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
+    container_name: sqlserverdb
     environment:
       SA_PASSWORD: "SqlS3rv3r23"
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
-    healthcheck:
-      test: ["CMD", "sqlcmd", "-U", "sa", "-P", "SqlS3rv3r23", "-Q", "SELECT 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  sqlserver-init:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - sqlserverdb
+    volumes:
+      - ./sqlserver/sql-server-init/setup.sql:/sql/setup.sql
+      - ./sqlserver/sql-server-init/entrypoint.sh:/entrypoint.sql
+    entrypoint: ["/bin/bash","/entrypoint.sh"]
 
   movieservice:
     build: .
     ports:
       - "8080:8080"
     depends_on:
-      sqlserver:
-        condition: service_healthy
+      - sqlserverdb
     environment:
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserver:1433;databaseName=moviesdb;TrustServerCertificate=true
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserverdb:1433;databaseName=moviesdb;TrustServerCertificate=true
       SPRING_DATASOURCE_USERNAME: sa
       SPRING_DATASOURCE_PASSWORD: SqlS3rv3r23
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+volumes:
+  sqlserver_data:
