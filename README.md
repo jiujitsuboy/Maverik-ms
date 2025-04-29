@@ -32,33 +32,26 @@ This will start:
 - SQL Server on port 1433
 - MovieService app on port 8080
 
-(Optionally, Adminer web DB client on port 8081 — if added)
-
 ---
 
 ## 🔥 Available Endpoints
 
-| Method | Endpoint | Description |
-|:------|:---------|:------------|
-| POST | `/movies` | Create a new movie |
-| GET | `/movies` | List all movies (pagination + sorting) |
-| GET | `/movies/{id}` | Get movie by ID |
-| PUT | `/movies/{id}` | Update movie |
-| DELETE | `/movies/{id}` | Delete movie |
-| GET | `/movies/csv` | Download CSV of all movies |
-| GET | `/movies/poster/{id}` | Get poster URL for movie |
-| GET | `/movies/aggregate` | Start aggregation (secured by API Key) |
-
-
-### Security 🔐
-- `/movies/aggregate` requires API key.
-- Send HTTP header:
-
-```bash
-X-API-KEY: supersecretapikey
-```
+| Method | Endpoint | Description                                            |
+|:------|:---------|:-------------------------------------------------------|
+| POST | `/movies` | Create a new movie                                     |
+| GET | `/movies` | List all movies (pagination + sorting)                 |
+| GET | `/movies/{id}` | Get movie by ID                                        |
+| PUT | `/movies/{id}` | Update movie                                           |
+| DELETE | `/movies/{id}` | Delete movie                                           |
+| GET | `/movies/csv` | Download CSV of all movies                             |
+| GET | `/movies/poster/{id}` | Get poster URL for movie                               |
+| GET | `/movies/aggregate` | Start aggregation (Retrieve movies from external APIs) |
 
 ---
+
+## 📦 Postman collection
+
+[Postman-Collection](Maverik.postman_collection.json)
 
 ## 📦 Example cURL commands
 
@@ -133,13 +126,3 @@ services:
 ```
 
 ---
-
-## 🚀 Future Improvements (optional)
-- OAuth2 authentication
-- Admin UI to manage movies
-- Kafka messaging for events
-- Full Swagger/OpenAPI docs
-
----
-
-# 🎉 Done! Happy coding!

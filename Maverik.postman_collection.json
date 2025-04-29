@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "54f092ba-225c-4479-a082-005696dc5a51",
+		"name": "Maverik",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13190416"
+	},
+	"item": [
+		{
+			"name": "create movie",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"title\": \"Inception\",\n        \"year\": \"2010\",\n        \"actor\": \"Leonardo DiCaprio\",\n        \"director\": \"Christopher Nolan\",\n        \"rating\": \"8.8\",\n        \"posterUrl\": \"https://example.com/poster/inception.jpg\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/movies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8080/movies \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"title\": \"Inception\",\n        \"year\": \"2010\",\n        \"actor\": \"Leonardo DiCaprio\",\n        \"director\": \"Christopher Nolan\",\n        \"rating\": \"8.8\",\n        \"posterUrl\": \"https://example.com/poster/inception.jpg\"\n      }'\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Movies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies?page=0&size=10&sortBy=title",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						},
+						{
+							"key": "sortBy",
+							"value": "title"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X GET \"http://localhost:8080/movies?page=0&size=10&sortBy=title\"\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Get movie by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"1"
+					]
+				},
+				"description": "Generated from cURL: curl -X GET http://localhost:8080/movies/1\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Movie",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"title\": \"Inception (Updated)\",\n        \"year\": \"2010\",\n        \"actor\": \"Leonardo DiCaprio\",\n        \"director\": \"Christopher Nolan\",\n        \"rating\": \"9.0\",\n        \"posterUrl\": \"https://example.com/poster/inception-new.jpg\"\n      }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/movies/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"1"
+					]
+				},
+				"description": "Generated from cURL: curl -X PUT http://localhost:8080/movies/1 \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"title\": \"Inception (Updated)\",\n        \"year\": \"2010\",\n        \"actor\": \"Leonardo DiCaprio\",\n        \"director\": \"Christopher Nolan\",\n        \"rating\": \"9.0\",\n        \"posterUrl\": \"https://example.com/poster/inception-new.jpg\"\n      }'\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Movie",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"1"
+					]
+				},
+				"description": "Generated from cURL: curl -X DELETE http://localhost:8080/movies/1\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Download CSV",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/csv",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"csv"
+					]
+				},
+				"description": "Generated from cURL: curl -X GET http://localhost:8080/movies/csv -o movies.csv\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Movie Poster",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/poster/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"poster",
+						"1"
+					]
+				},
+				"description": "Generated from cURL: curl -X GET http://localhost:8080/movies/poster/1\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Start Collection Movies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/movies/aggregate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movies",
+						"aggregate"
+					]
+				},
+				"description": "Generated from cURL: curl -X GET http://localhost:8080/movies/aggregate\n"
+			},
+			"response": []
+		}
+	]
+}
