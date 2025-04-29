@@ -74,10 +74,9 @@ curl -X POST http://localhost:8080/movies \
 curl -X GET "http://localhost:8080/movies?page=0&size=10&sortBy=title"
 ```
 
-### Trigger Aggregation (secured)
+### Trigger Aggregation
 ```bash
-curl -X GET http://localhost:8080/movies/aggregate \
-  -H "X-API-KEY: supersecretapikey"
+curl -X GET http://localhost:8080/movies/aggregate
 ```
 
 ---
@@ -85,16 +84,77 @@ curl -X GET http://localhost:8080/movies/aggregate \
 ## 🧠 Environment Config (application.yml)
 
 ```yaml
+
+server:
+  port: 8080
+
 spring:
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=moviesdb;TrustServerCertificate=true
     username: sa
     password: SqlS3rv3r23
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: true
 
 external:
   movie-api:
     base-url: https://gateway.maverik.com/movie/api
+    timeout: 3000
+    retry-attempts: 3
+
+logging:
+  level:
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{X-Correlation-Id}] %-5level %logger{36} - %msg%n"
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      movieSearchCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+      movieDetailsCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+    metrics:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,circuitbreakerevents
+  endpoint:
+    health:
+      show-details: always
+  web:
+    base-path: /actuator
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+
+
 ```
 
 ---
@@ -102,27 +162,44 @@ external:
 ## 🐳 Docker Compose Overview
 
 ```yaml
+version: '3.8'
+
 services:
-  sqlserver:
+
+  sqlserverdb:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserverdb
+    environment:
+      SA_PASSWORD: "SqlS3rv3r23"
+      ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
-    environment:
-      SA_PASSWORD: SqlS3rv3r23
-      ACCEPT_EULA: "Y"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  sqlserver-init:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - sqlserverdb
+    volumes:
+      - ./sqlserver/sql-server-init/setup.sql:/sql/setup.sql
+      - ./sqlserver/sql-server-init/entrypoint.sh:/entrypoint.sql
+    entrypoint: ["/bin/bash","/entrypoint.sh"]
 
   movieservice:
     build: .
     ports:
       - "8080:8080"
     depends_on:
-      sqlserver:
-        condition: service_healthy
+      - sqlserverdb
     environment:
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserver:1433;databaseName=moviesdb;TrustServerCertificate=true
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserverdb:1433;databaseName=moviesdb;TrustServerCertificate=true
       SPRING_DATASOURCE_USERNAME: sa
       SPRING_DATASOURCE_PASSWORD: SqlS3rv3r23
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+volumes:
+  sqlserver_data:
 ```
 
 ---
